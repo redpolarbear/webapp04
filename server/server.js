@@ -2,13 +2,15 @@ require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
+var logger = require('morgan');
 
-var {mongoose} = require('./db/mongoose');
-var {BookProfile} = require('./models/bookprofile.model.js');
 
 var app = express();
 const port = process.env.PORT;
 
+var usersRouters = require('./routes/user.routes');
+
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -19,7 +21,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-
+app.use('/api/users', usersRouters);
 
 app.listen(port, () => {
     console.log('The server is up and running on port: ' + port);

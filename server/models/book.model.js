@@ -1,8 +1,15 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const { mongoose } = require('./../db/mongoose');
+const Schema = mongoose.Schema;
 
-var {User} = require('./user.model.js');
-var {BookProfile} = require('./bookprofile.model.js');
+const {User} = require('./user.model.js');
+const {BookProfile} = require('./bookprofile.model.js');
+
+var PrivacySchema = new Schema ({
+    isAllowedToDisplayToPublic: Boolean,
+    isAllowedToDisplayToFriends: Boolean,
+    isAllowedToLendToPublic: Boolean,
+    isAllowedToLendToFriends: Boolean
+}, { _id: false });
 
 var BookSchema = new Schema({
     ownerId: {
@@ -13,12 +20,7 @@ var BookSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'BookProfile'
     },
-    privacy: {
-        isAllowedToDisplayToPublic: Boolean,
-        isAllowedToDisplayToFriends: Boolean,
-        isAllowedToLendToPublic: Boolean,
-        isAllowedToLendToFriends: Boolean
-    }
+    privacy: PrivacySchema
 }, {
     timestamps: true
 });

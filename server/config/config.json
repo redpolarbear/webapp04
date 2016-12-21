@@ -1,10 +1,12 @@
 {
   "test": {
     "PORT": 3000,
-    "MONGODB_URI": "mongodb://localhost:27017/airLibrary-dev"
+    "MONGODB_URI": "mongodb://localhost:27017/airLibrary-test",
+    "JWT_SECRET": "DcaR633EKP46US1i6YYByqXnyYC2M7oK"
   },
   "development": {
     "PORT": 3000,
-    "MONGODB_URI": "mongodb://localhost:27017/airLibrary-test"
+    "MONGODB_URI": "mongodb://localhost:27017/airLibrary-dev",
+    "JWT_SECRET": "qUU4YWF8VWePwF1kiei03DW9d04X62Kh"
   }
 }

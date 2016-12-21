@@ -7,7 +7,7 @@ var userController = require('./../controllers/user.controller');
 // var middleware = require('../controllers/middleware')(db);
 
 router.post('/', userController.createUser);
-// router.post('/login', usersController.loginUser);
+router.post('/login', userController.loginUser);
 // router.delete('/login', middleware.requireAuthentication, usersController.logoutUser);
 
 module.exports = router;

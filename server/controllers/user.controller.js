@@ -17,17 +17,17 @@ exports.createUser = function(req, res) {
             _id: userProfileId,
             userId: user._id
         });
-        userProfile.save().then(() => {
-            return user.generateAuthToken();
-        }).then((token) => {
-            res.header('x-auth', token).send(user);
-        })
+        return userProfile.save();
+    }).then(() => {
+        return user.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(user);
     }).catch( (e) => {
         res.status(400).send(e);
     });
 };
 
-exports.userSignIn = function(req, res) {
+exports.loginUser = function(req, res) {
     var body = _.pick(req.body, ['email', 'password']);
 
     User.findByCredential(body.email, body.password).then( (user) => {

@@ -20,12 +20,12 @@ var MetaSchema = new mongoose.Schema({
 }, { _id: false });
 
 var UserProfile = mongoose.model('UserProfile', {
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-        unique: true
-    },
+    // userId: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User',
+    //     required: true,
+    //     unique: true
+    // },
     firstName: String,
     lastName: String,
     memberId: String,

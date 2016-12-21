@@ -51,7 +51,7 @@ UserSchema.methods.toJSON = function() {
     var user = this;
     var userObject = user.toObject();
 
-    return _.pick(userObject, ['_id', 'name', 'email']);
+    return _.pick(userObject, ['_id', 'name', 'email', 'userProfileId']);
 };
 
 UserSchema.methods.generateAuthToken = function() {
@@ -90,7 +90,7 @@ UserSchema.statics.findByCredential = function(email, password) {
     return User.findOne({email})
         .then( (user) => {
             if (!user) {
-                return Promise.reject();
+                return Promise.reject('Invalid Email Address or User does\'t exist.');
             }
 
             return new Promise((resolve, reject) => {
@@ -99,7 +99,7 @@ UserSchema.statics.findByCredential = function(email, password) {
                     if (res) {
                         resolve(user);
                     } else (
-                        reject()
+                        reject('Invalid Password.')
                     )
                 });
             });

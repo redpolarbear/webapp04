@@ -9,6 +9,7 @@ var app = express();
 const port = process.env.PORT;
 
 var usersRouters = require('./routes/user.routes');
+var userProfilesRouters = require('./routes/userprofile.routes');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -22,9 +23,10 @@ app.use(function (req, res, next) {
 });
 
 app.use('/api/users', usersRouters);
+app.use('/api/profiles', userProfilesRouters);
 
 app.listen(port, () => {
     console.log('The server is up and running on port: ' + port);
 });
 
-module.exports = {app};
+module.exports = { app };

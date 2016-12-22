@@ -37,6 +37,11 @@ var BookSchema = new mongoose.Schema({
         default: 0 // 0 = on the book shelf
     },
     privacy: PrivacySchema
+    _creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 }, {
     timestamps: true
 });

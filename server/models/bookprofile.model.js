@@ -48,7 +48,7 @@ BookProfileSchema.statics.findByISBN = function(isbn) {
             if (!bookProfile) {
                 return Promise.reject('Book was not found. -- ISBN10');
             } else {
-                return Promise.resolve({_id: bookProfile._id});
+                return Promise.resolve(bookProfile);
             }
         })
     } else if (isbn.length == 13) {
@@ -56,7 +56,7 @@ BookProfileSchema.statics.findByISBN = function(isbn) {
             if (!bookProfile) {
                 return Promise.reject('Book was not found. --ISBN13');
             } else {
-                return Promise.resolve({_id: bookProfile._id});
+                return Promise.resolve(bookProfile);
             }
         })
     }

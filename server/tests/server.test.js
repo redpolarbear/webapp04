@@ -3,7 +3,6 @@ const request = require('supertest');
 const { ObjectID } = require('mongodb');
 
 const { app } = require('./../server');
-// const {Todo} = require('./../models/todo');
 const { User } = require('./../models/user.model');
 const { UserProfile } = require('./../models/userprofile.model');
 const { BookProfile } = require('./../models/bookprofile.model');
@@ -13,7 +12,6 @@ const { users, populateUsers, userProfiles, populateUserProfiles, populateBookPr
 beforeEach(populateUsers);
 beforeEach(populateUserProfiles);
 beforeEach(populateBookProfiles);
-// beforeEach(populateTodos);
 
 // test the user creation
 describe('POST /api/users', () => {

@@ -1,7 +1,5 @@
 const { mongoose } = require('./../db/mongoose');
 
-const {User} = require('./user.model');
-
 var KidsSchema = new mongoose.Schema({
     name: String,
     DOB: Date,

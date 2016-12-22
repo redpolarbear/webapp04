@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const validator = require('validator');
 
 const { BookProfile } = require('./../models/bookprofile.model');
 
@@ -15,8 +16,8 @@ exports.createBookProfile = function(req, res) {
             'language',
             'imageMediumUrl',
             'imageLargeUrl',
-            'ISBN10',
-            'ISBN13',
+            'isbn10',
+            'isbn13',
             'categories',
             'tags',
             'pageCount',
@@ -33,4 +34,19 @@ exports.createBookProfile = function(req, res) {
     }, (e) => {
         res.status(400).send(e);
     });
+};
+
+// function for GET /api/book?isbn=xxxxx&searchfor=xxxxx
+exports.getBookProfileByISBN = function(req, res) {
+    var query = req.query;
+
+    if ( query.hasOwnProperty('isbn') && validator.isISBN(query.isbn) ) {
+        var isbn = query.isbn;
+
+        BookProfile.findByISBN(isbn).then( (doc) => {
+            res.send(doc);
+        }).catch( (e) => {
+                res.status(400).send(e);
+        });
+    }
 };

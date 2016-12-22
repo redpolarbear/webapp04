@@ -10,6 +10,7 @@ const port = process.env.PORT;
 
 var usersRouters = require('./routes/user.routes');
 var userProfilesRouters = require('./routes/userprofile.routes');
+var bookProfilesRouters = require('./routes/bookprofile.routes');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -24,6 +25,7 @@ app.use(function (req, res, next) {
 
 app.use('/api/users', usersRouters);
 app.use('/api/profiles', userProfilesRouters);
+app.use('/api/book/detail', bookProfilesRouters);
 
 app.listen(port, () => {
     console.log('The server is up and running on port: ' + port);

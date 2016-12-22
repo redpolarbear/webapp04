@@ -16,8 +16,8 @@ var BookProfileSchema = new mongoose.Schema({
     language: [String],
     imageMediumUrl: String,
     imageLargeUrl: String,
-    ISBN10: String,
-    ISBN13: String,
+    isbn10: String,
+    isbn13: String,
     categories: [String],
     tags: [String],
     pageCount: Number,
@@ -33,31 +33,30 @@ var BookProfileSchema = new mongoose.Schema({
     timestamps: true
 });
 
+
+BookProfileSchema.statics.findByISBN = function(isbn) {
+    var BookProfile = this;
+
+    if (isbn.length == 10) {
+        return BookProfile.findOne({isbn10: isbn}).then( (bookProfile) => {
+            if (!bookProfile) {
+                return Promise.reject('Book was not found. -- ISBN10');
+            } else {
+                return Promise.resolve(bookProfile);
+            }
+        })
+    } else if (isbn.length == 13) {
+        return BookProfile.findOne({isbn13: isbn}).then( (bookProfile) => {
+            if (!bookProfile) {
+                return Promise.reject('Book was not found. --ISBN13');
+            } else {
+                return Promise.resolve(bookProfile);
+            }
+        })
+    }
+};
+
+
 var BookProfile = mongoose.model('BookProfile', BookProfileSchema);
-
-BookProfileSchema.statics.findByISBN10 = function( ISBN10 ) {
-    var BookProfile = this;
-
-    return BookProfile.findOne({ISBN10}).then( (bookProfile) => {
-        if (!bookProfile) {
-            return Promise.reject();
-        } else {
-            return Promise.resolve(bookProfile);
-        }
-    })
-};
-
-BookProfileSchema.statics.findByISBN13 = function( ISBN13 ) {
-    var BookProfile = this;
-
-    return BookProfile.findOne({ISBN13}).then( (bookProfile) => {
-        if (!bookProfile) {
-            return Promise.reject();
-        } else {
-            return Promise.resolve(bookProfile);
-        }
-    })
-};
-
 
 module.exports = { BookProfile };

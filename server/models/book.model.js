@@ -20,6 +20,11 @@ var BookSchema = new mongoose.Schema({
         ref: 'BookProfile'
     },
     privacy: PrivacySchema
+    _creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 }, {
     timestamps: true
 });

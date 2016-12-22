@@ -6,6 +6,7 @@ const { app } = require('./../server');
 // const {Todo} = require('./../models/todo');
 const { User } = require('./../models/user.model');
 const { UserProfile } = require('./../models/userprofile.model');
+const { BookProfile } = require('./../models/bookprofile.model');
 
 const { users, populateUsers, userProfiles, populateUserProfiles } = require('./seed/seed');
 
@@ -133,4 +134,27 @@ describe('POST /api/users/login', () => {
                 }).catch((e) => done(e));
             });
     });
+});
+
+describe('PATCH /api/profiles', () => {
+    it('should update the user\'s profile', (done) => {
+        var profile = {
+            'mobile': '12345678901',
+            'location': 'Shanghai',
+            'DOB': '1990-01-01'
+        };
+
+        request(app)
+            .patch('/api/profiles')
+            .set('x-auth', users[0].tokens[0].token)
+            .send(profile)
+            .expect(200)
+            .expect( (res) => {
+                expect(res.body.mobile).toBe(profile.mobile);
+                expect(res.body.location).toBe(profile.location);
+                expect((res.body.DOB).slice(0,10)).toBe(profile.DOB);
+            })
+            .end(done);
+    });
+
 });

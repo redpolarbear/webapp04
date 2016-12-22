@@ -11,13 +11,19 @@ var BookProfileSchema = new mongoose.Schema({
     title: String,
     subtitle: String,
     originTitle: String,
-    author: [String],
+    authors: [String],
     printType: String,
-    language: [String],
+    languages: [String],
     imageMediumUrl: String,
     imageLargeUrl: String,
-    isbn10: String,
-    isbn13: String,
+    isbn10: {
+        type: String,
+        unique: true
+    },
+    isbn13: {
+        type: String,
+        unique: true
+    },
     categories: [String],
     tags: [String],
     pageCount: Number,
@@ -26,7 +32,7 @@ var BookProfileSchema = new mongoose.Schema({
     summary: String,
     price: String,
     meta: MetaSchema,
-    reviewsId: [{
+    reviewsIds: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'BookReview' }]
 }, {
@@ -42,7 +48,7 @@ BookProfileSchema.statics.findByISBN = function(isbn) {
             if (!bookProfile) {
                 return Promise.reject('Book was not found. -- ISBN10');
             } else {
-                return Promise.resolve(bookProfile);
+                return Promise.resolve({_id: bookProfile._id});
             }
         })
     } else if (isbn.length == 13) {
@@ -50,7 +56,7 @@ BookProfileSchema.statics.findByISBN = function(isbn) {
             if (!bookProfile) {
                 return Promise.reject('Book was not found. --ISBN13');
             } else {
-                return Promise.resolve(bookProfile);
+                return Promise.resolve({_id: bookProfile._id});
             }
         })
     }

@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const { User } = require('./../../models/user.model');
 const { UserProfile } = require('./../../models/userprofile.model');
+const { BookProfile } = require('./../../models/bookprofile.model');
 
 const userOneId = new ObjectID();
 const userOneProfleId = new ObjectID();
@@ -79,4 +80,8 @@ const populateUserProfiles = (done) => {
     }).then ( () => done());
 };
 
-module.exports = {users, populateUsers, userProfiles, populateUserProfiles};
+const populateBookProfiles = (done) => {
+    BookProfile.remove({}).then( () => done());
+};
+
+module.exports = {users, populateUsers, userProfiles, populateUserProfiles, populateBookProfiles};

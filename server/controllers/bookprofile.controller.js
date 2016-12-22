@@ -11,9 +11,9 @@ exports.createBookProfile = function(req, res) {
             'title',
             'subtitle',
             'originTitle',
-            'author',
+            'authors',
             'printType',
-            'language',
+            'languages',
             'imageMediumUrl',
             'imageLargeUrl',
             'isbn10',
@@ -36,7 +36,7 @@ exports.createBookProfile = function(req, res) {
     });
 };
 
-// function for GET /api/book?isbn=xxxxx&searchfor=xxxxx
+// function for GET /api/book?isbn=xxxxx
 exports.getBookProfileByISBN = function(req, res) {
     var query = req.query;
 
@@ -46,7 +46,9 @@ exports.getBookProfileByISBN = function(req, res) {
         BookProfile.findByISBN(isbn).then( (doc) => {
             res.send(doc);
         }).catch( (e) => {
-                res.status(400).send(e);
+            res.status(400).send(e);
         });
+    } else {
+        return res.status(400).send('Please input the ISBN or ISBN is invalid!');
     }
 };

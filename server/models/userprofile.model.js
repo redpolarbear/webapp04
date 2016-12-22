@@ -33,7 +33,10 @@ var UserProfile = mongoose.model('UserProfile', {
     DOB: Date,
     gender: String,
     kids: [KidsSchema],
-    meta: MetaSchema
+    meta: {
+        bookProfile: MetaSchema,
+        moment: MetaSchema
+    }
 });
 
 module.exports = { UserProfile };

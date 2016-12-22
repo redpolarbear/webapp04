@@ -8,12 +8,14 @@ const { User } = require('./../models/user.model');
 const { UserProfile } = require('./../models/userprofile.model');
 const { BookProfile } = require('./../models/bookprofile.model');
 
-const { users, populateUsers, userProfiles, populateUserProfiles } = require('./seed/seed');
+const { users, populateUsers, userProfiles, populateUserProfiles, populateBookProfiles } = require('./seed/seed');
 
 beforeEach(populateUsers);
 beforeEach(populateUserProfiles);
+beforeEach(populateBookProfiles);
 // beforeEach(populateTodos);
 
+// test the user creation
 describe('POST /api/users', () => {
     it('should create a user', (done) => {
         var name = 'bill';
@@ -82,6 +84,7 @@ describe('POST /api/users', () => {
     });
 });
 
+// test the user login
 describe('POST /api/users/login', () => {
     it('should login user and return auth token', (done) => {
         request(app)
@@ -136,6 +139,7 @@ describe('POST /api/users/login', () => {
     });
 });
 
+// test the user profile update
 describe('PATCH /api/profiles', () => {
     it('should update the user\'s profile', (done) => {
         var profile = {
@@ -157,4 +161,51 @@ describe('PATCH /api/profiles', () => {
             .end(done);
     });
 
+});
+
+// test the book profile creation
+describe('POST /api/book/detail', () => {
+   it('should create a new book profile', (done) => {
+       var bookProfile = {
+           'subtitle': 'Band 3: Logik der Forschung',
+           'authors': ['Karl R. Popper'],
+           'publishedDate':'2005-5-1',
+           'originTitle': '',
+           'binding': 'Taschenbuch',
+           'languages': [],
+           'pages': '601',
+           'imageMediumUrl': 'http:\/\/open.6api.net\/mpic\/s28123842.jpg',
+           'imageLargeUrl': 'http:\/\/open.6api.net\/lpic\/s28123842.jpg',
+           'publisher':'Mohr Siebeck',
+           'isbn10':'316148410X',
+           'isbn13':'9783161484100',
+           'title':'Gesammelte Werke',
+           'summary':'',
+           'price':'0.00'
+       };
+
+       request(app)
+           .post('/api/book/detail')
+           .set('x-auth', users[0].tokens[0].token)
+           .send(bookProfile)
+           .expect(200)
+           .expect( (res) => {
+               expect(res.body.title).toBe(bookProfile.title);
+               expect(res.body.isbn10).toBe(bookProfile.isbn10);
+               expect(res.body.isbn13).toBe(bookProfile.isbn13);
+           })
+           .end((err) => {
+                if (err) {
+                    return done(err)
+                }
+
+                BookProfile.findByISBN(bookProfile.isbn13).then((doc) => {
+                    expect(doc).toExist();
+                    expect(doc.title).toBe(bookProfile.title);
+                    expect(doc.isbn10).toBe(bookProfile.isbn10);
+                    expect(doc.isbn13).toBe(bookProfile.isbn13);
+                    done();
+                }).catch( (e) => done(e));
+           });
+   });
 });

@@ -3,15 +3,20 @@
 var express = require('express');
 var router = express.Router();
 
-var bookController = require('./../controllers/book.controller');
+var bookProfileController = require('./../controllers/bookprofile.controller');
 var middleware = require('./../middleware/authenticate');
 
 router.use(middleware.authenticate);
-// router.get('/', bookController.getBook);
+router.get('/', bookProfileController.getBookProfileByISBN);
+router.post('/', bookProfileController.createBookProfile);
 // router.get('/:id', bookController.getBookById);
 // router.delete('/:id', bookController.deleteBookById);
 // router.patch('/:id', bookController.updateBookById);
 
 module.exports = router;
+
+
+
+
 
 

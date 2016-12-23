@@ -1,19 +1,15 @@
 const { mongoose } = require('./../db/mongoose');
 
-const { User } = require('./user.model');
-const { Moment } = require('./moment.model');
+const { User } = require('././user.model.js');
+const { Moment } = require('./moment.model.js');
 
 var MomentReviewSchema = new mongoose.Schema({
-    momentId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Moment'
-    },
-    votes: Number,
     comment: String,
     _creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
+    // TODO replyto???
 }, {
     timestamps: true
 });

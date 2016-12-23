@@ -3,7 +3,7 @@
 var express = require('express');
 var router = express.Router();
 
-var bookController = require('./../controllers/book.controller');
+var bookController = require('./book.controller.js');
 var middleware = require('./../middleware/authenticate');
 
 router.use(middleware.authenticate);

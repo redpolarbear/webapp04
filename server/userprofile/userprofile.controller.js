@@ -1,9 +1,9 @@
-const { mongoose } = require('./../models/userprofile.model');
+const { mongoose } = require('./userprofile.model');
 const { ObjectID } = require('mongodb');
 const _ = require('lodash');
 
-const { User } = require('./../models/user.model');
-const { UserProfile } = require('./../models/userprofile.model');
+const { User } = require('./../user/user.model');
+const { UserProfile } = require('./userprofile.model');
 
 var exports = module.exports = {};
 
@@ -15,7 +15,7 @@ exports.patchUserProfile = function(req, res) {
         'location',
         'DOB',
         'gender']);
-    var id = req.user.userProfileId;
+    var id = req.user.userProfile;
 
     if(!ObjectID.isValid(id)) {
         return res.status(404).send();

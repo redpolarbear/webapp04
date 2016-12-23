@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const { mongoose } = require('./../db/mongoose');
-const { UserProfile } = require('./userprofile.model');
+const { UserProfile } = require('./../userprofile/userprofile.model.js');
 
 var UserSchema = new mongoose.Schema({
     name: {
@@ -30,7 +30,7 @@ var UserSchema = new mongoose.Schema({
         required: true,
         minlength: 4
     },
-    userProfileId: {
+    userProfile: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'UserProfile',
         required: true
@@ -51,7 +51,7 @@ UserSchema.methods.toJSON = function() {
     var user = this;
     var userObject = user.toObject();
 
-    return _.pick(userObject, ['_id', 'name', 'email', 'userProfileId']);
+    return _.pick(userObject, ['_id', 'name', 'email', 'userProfile']);
 };
 
 UserSchema.methods.generateAuthToken = function() {
@@ -65,6 +65,23 @@ UserSchema.methods.generateAuthToken = function() {
         .then( () => {
             return token;
         });
+};
+
+UserSchema.methods.removeToken = function(token) {
+    var user = this;
+
+    return user.update({
+        $pull: {
+            tokens: {token}
+        }
+    });
+};
+
+UserSchema.methods.addBookProfileLike = function(bookProfileid) {
+  var user = this;
+
+
+
 };
 
 UserSchema.statics.findByToken = function(token) {

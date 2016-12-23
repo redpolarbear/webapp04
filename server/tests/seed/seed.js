@@ -1,9 +1,9 @@
 const { ObjectID } = require('mongodb');
 const jwt = require('jsonwebtoken');
 
-const { User } = require('./../../models/user.model');
-const { UserProfile } = require('./../../models/userprofile.model');
-const { BookProfile } = require('./../../models/bookprofile.model');
+const { User } = require('./../../user/user.model.js');
+const { UserProfile } = require('./../../userprofile/userprofile.model');
+const { BookProfile } = require('./../../bookprofile/bookprofile.model');
 
 const userOneId = new ObjectID();
 const userOneProfleId = new ObjectID();
@@ -27,7 +27,7 @@ const users = [{
     name: 'john',
     email: 'jsmith@example.com',
     password: 'userOnePass',
-    userProfileId: userOneProfleId,
+    userProfile: userOneProfleId,
     tokens: [{
         access: 'auth',
         token: jwt.sign({_id: userOneId, access: 'auth'}, process.env.JWT_SECRET).toString()
@@ -37,30 +37,12 @@ const users = [{
     name: 'rose',
     email: 'rmarry@example.com',
     password: 'userTwoPass',
-    userProfileId: userTwoProfileId,
+    userProfile: userTwoProfileId,
     tokens: [{
         access: 'auth',
         token: jwt.sign({_id: userTwoId, access: 'auth'}, process.env.JWT_SECRET).toString()
     }]
 }];
-
-// const todos = [{
-//     _id: new ObjectID(),
-//     text: 'First test todo',
-//     _creator: userOneId
-// }, {
-//     _id: new ObjectID(),
-//     text: 'Second test todo',
-//     completed: true,
-//     completedAt: 333,
-//     _creator: userTwoId
-// }];
-
-// const populateTodos = (done) => {
-//     Todo.remove({}).then(() => {
-//         return Todo.insertMany(todos);
-//     }).then(() => done());
-// };
 
 const populateUsers = (done) => {
     User.remove({}).then(() => {

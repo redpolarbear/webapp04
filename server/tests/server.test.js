@@ -3,9 +3,9 @@ const request = require('supertest');
 const { ObjectID } = require('mongodb');
 
 const { app } = require('./../server');
-const { User } = require('./../models/user.model');
-const { UserProfile } = require('./../models/userprofile.model');
-const { BookProfile } = require('./../models/bookprofile.model');
+const { User } = require('./../user/user.model');
+const { UserProfile } = require('./../userprofile/userprofile.model');
+const { BookProfile } = require('./../bookprofile/bookprofile.model');
 
 const { users, populateUsers, userProfiles, populateUserProfiles, populateBookProfiles } = require('./seed/seed');
 
@@ -14,14 +14,14 @@ beforeEach(populateUserProfiles);
 beforeEach(populateBookProfiles);
 
 // test the user creation
-describe('POST /api/users', () => {
+describe('POST /api/user', () => {
     it('should create a user', (done) => {
         var name = 'bill';
         var email = 'bgates@example.com';
         var password = '123mnb!';
 
         request(app)
-            .post('/api/users')
+            .post('/api/user')
             .send({name, email, password})
             .expect(200)
             .expect((res) => {
@@ -38,7 +38,7 @@ describe('POST /api/users', () => {
                 User.findOne({email}).then((user) => {
                     expect(user).toExist();
                     expect(user.password).toNotBe(password);
-                    return UserProfile.findOne({_id: res.body.userProfileId})
+                    return UserProfile.findOne({_id: res.body.userProfile})
                 }).then( (profile) => {
                     expect(profile).toExist();
                     done();
@@ -48,7 +48,7 @@ describe('POST /api/users', () => {
 
     it('should return validation errors if request invalid', (done) => {
         request(app)
-            .post('/api/users')
+            .post('/api/user')
             .send({
                 email: 'and',
                 password: '123'
@@ -59,7 +59,7 @@ describe('POST /api/users', () => {
 
     it('should not create user if email in use', (done) => {
         request(app)
-            .post('/api/users')
+            .post('/api/user')
             .send({
                 name: 'mike',
                 email: users[0].email,
@@ -71,7 +71,7 @@ describe('POST /api/users', () => {
 
     it('should not create user if name in use', (done) => {
         request(app)
-            .post('/api/users')
+            .post('/api/user')
             .send({
                 name: users[0].name,
                 email: 'mjordan@example.com',
@@ -83,10 +83,10 @@ describe('POST /api/users', () => {
 });
 
 // test the user login
-describe('POST /api/users/login', () => {
+describe('POST /api/user/login', () => {
     it('should login user and return auth token', (done) => {
         request(app)
-            .post('/api/users/login')
+            .post('/api/user/login')
             .send({
                 email: users[1].email,
                 password: users[1].password
@@ -105,7 +105,7 @@ describe('POST /api/users/login', () => {
                         access: 'auth',
                         token: res.headers['x-auth']
                     });
-                    return UserProfile.findById(users[1].userProfileId);
+                    return UserProfile.findById(users[1].userProfile);
                 }).then( (profile) => {
                     expect(profile).toExist();
                     done();
@@ -115,7 +115,7 @@ describe('POST /api/users/login', () => {
 
     it('should reject invalid login', (done) => {
         request(app)
-            .post('/api/users/login')
+            .post('/api/user/login')
             .send({
                 email: users[1].email,
                 password: users[1].password + '1'
@@ -138,7 +138,7 @@ describe('POST /api/users/login', () => {
 });
 
 // test the user profile update
-describe('PATCH /api/profiles', () => {
+describe('PATCH /api/profile', () => {
     it('should update the user\'s profile', (done) => {
         var profile = {
             'mobile': '12345678901',
@@ -147,7 +147,7 @@ describe('PATCH /api/profiles', () => {
         };
 
         request(app)
-            .patch('/api/profiles')
+            .patch('/api/profile')
             .set('x-auth', users[0].tokens[0].token)
             .send(profile)
             .expect(200)

@@ -8,9 +8,9 @@ var logger = require('morgan');
 var app = express();
 const port = process.env.PORT;
 
-var usersRouters = require('./routes/user.routes');
-var userProfilesRouters = require('./routes/userprofile.routes');
-var bookProfilesRouters = require('./routes/bookprofile.routes');
+var usersRouters = require('./user/user.routes.js');
+var userProfilesRouters = require('./userprofile/userprofile.routes.js');
+var bookProfilesRouters = require('./bookprofile/bookprofile.routes.js');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -23,8 +23,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/api/users', usersRouters);
-app.use('/api/profiles', userProfilesRouters);
+app.use('/api/user', usersRouters);
+app.use('/api/profile', userProfilesRouters);
 app.use('/api/book/detail', bookProfilesRouters);
 
 app.listen(port, () => {

@@ -1,6 +1,6 @@
 const { mongoose } = require('./../db/mongoose');
 
-const { User } = require('./user.model');
+const { User } = require('./../user/user.model');
 const { BookProfile } = require('./bookprofile.model');
 
 var BookReviewSchema = new mongoose.Schema({

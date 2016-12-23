@@ -1,7 +1,7 @@
 const { mongoose } = require('./../db/mongoose');
 
-const { User } = require('./user.model.js');
-const { BookProfile } = require('./bookprofile.model.js');
+const { User } = require('././user.model.js');
+const { BookProfile } = require('./../bookprofile/bookprofile.model.js');
 
 var PrivacySchema = new mongoose.Schema({
     isAllowedToDisplayToPublic: {
@@ -37,11 +37,6 @@ var BookSchema = new mongoose.Schema({
         default: 0 // 0 = on the book shelf
     },
     privacy: PrivacySchema
-    _creator: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    }
 }, {
     timestamps: true
 });

@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const validator = require('validator');
 
-const { BookProfile } = require('./../models/bookprofile.model');
+const { BookProfile } = require('./bookprofile.model.js');
 
 var exports = module.exports = {};
 

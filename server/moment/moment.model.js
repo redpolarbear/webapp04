@@ -1,15 +1,14 @@
 const { mongoose } = require('./../db/mongoose');
 
-const { User } = require('./user.model');
-const { Book } = require('./book.model');
-
-var MomentReviewSchema = new mongoose.Schema({
+const { User } = require('./../user/user.model.js');
+const { Book } = require('./../book/book.model.js');
 
 
-});
+var Moment = mongoose.model('Moment', MomentSchema);
+
+module.exports = { Moment };
 
 var MomentSchema = new mongoose.Schema({
-
     content: String,
     imageUrlIds: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -17,12 +16,13 @@ var MomentSchema = new mongoose.Schema({
     }],
     bookId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Book'
+        ref: 'Book',
     },
     likes: [{
-
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }],
-    _creator: {
+    creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
@@ -33,7 +33,3 @@ var MomentSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
-
-var Moment = mongoose.model('Moment', MomentSchema);
-
-module.exports = { Moment };

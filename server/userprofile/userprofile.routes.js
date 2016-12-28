@@ -8,5 +8,7 @@ var middleware = require('./../middleware/authenticate');
 
 router.use(middleware.authenticate);
 router.patch('/', userProfileController.patchUserProfile);
+router.get('/like', userProfileController.likeAndFavouriteOps);
+router.get('/favourite', userProfileController.likeAndFavouriteOps);
 
 module.exports = router;

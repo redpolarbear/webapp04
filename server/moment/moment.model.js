@@ -2,11 +2,7 @@ const { mongoose } = require('./../db/mongoose');
 
 const { User } = require('./../user/user.model.js');
 const { Book } = require('./../book/book.model.js');
-
-
-var Moment = mongoose.model('Moment', MomentSchema);
-
-module.exports = { Moment };
+const { UserProfile } = require('./../userprofile/userprofile.model');
 
 var MomentSchema = new mongoose.Schema({
     content: String,
@@ -20,7 +16,7 @@ var MomentSchema = new mongoose.Schema({
     },
     likes: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'UserProfile'
     }],
     creator: {
         type: mongoose.Schema.Types.ObjectId,
@@ -33,3 +29,8 @@ var MomentSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+
+var Moment = mongoose.model('Moment', MomentSchema);
+
+module.exports = { Moment };

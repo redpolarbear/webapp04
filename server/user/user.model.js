@@ -77,13 +77,6 @@ UserSchema.methods.removeToken = function(token) {
     });
 };
 
-UserSchema.methods.addBookProfileLike = function(bookProfileid) {
-  var user = this;
-
-
-
-};
-
 UserSchema.statics.findByToken = function(token) {
     var User = this;
     var decoded;
@@ -98,7 +91,7 @@ UserSchema.statics.findByToken = function(token) {
         '_id': decoded._id,
         'tokens.token': token,
         'tokens.access': 'auth'
-    })
+    }, '_id name email userProfile');
 };
 
 UserSchema.statics.findByCredential = function(email, password) {

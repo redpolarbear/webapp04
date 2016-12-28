@@ -1,6 +1,6 @@
 const { mongoose } = require('./../db/mongoose');
 
-const { User } = require('././user.model.js');
+const { User } = require('./../user/user.model.js');
 const { BookProfile } = require('./../bookprofile/bookprofile.model.js');
 
 var PrivacySchema = new mongoose.Schema({

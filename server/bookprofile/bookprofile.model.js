@@ -3,15 +3,16 @@ const { mongoose } = require('./../db/mongoose');
 const { BookReview } = require('./bookprofilereview.model');
 // const { UserProfile } = require('./../userprofile/userprofile.model');
 const { User } = require('./../user/user.model');
+const { UserProfile } = require('./../userprofile/userprofile.model');
 
 var MetaSchema = new mongoose.Schema({
     likes: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'UserProfile'
     }],
     favourites: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'UserProfile'
     }]
 }, { _id: false });
 

@@ -5,7 +5,7 @@ const { Moment } = require('./moment.model.js');
 
 var MomentReviewSchema = new mongoose.Schema({
     comment: String,
-    _creator: {
+    creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }

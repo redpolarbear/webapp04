@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const validator = require('validator');
+const { ObjectID } = require('mongodb');
 
 const { BookProfile } = require('./bookprofile.model.js');
 
@@ -36,7 +37,7 @@ exports.createBookProfile = function(req, res) {
     });
 };
 
-// function for GET /api/book?isbn=xxxxx
+// function for GET /api/book/detail?isbn=xxxxx
 exports.getBookProfileByISBN = function(req, res) {
     var query = req.query;
 

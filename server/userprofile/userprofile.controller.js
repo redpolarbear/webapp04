@@ -1,9 +1,9 @@
-const { mongoose } = require('./userprofile.model');
 const { ObjectID } = require('mongodb');
 const _ = require('lodash');
 
-const { User } = require('./../user/user.model');
 const { UserProfile } = require('./userprofile.model');
+const { BookProfile } = require('./../bookprofile/bookprofile.model');
+const { Moment } = require('./../moment/moment.model');
 
 var exports = module.exports = {};
 
@@ -15,7 +15,7 @@ exports.patchUserProfile = function(req, res) {
         'location',
         'DOB',
         'gender']);
-    var id = req.user.userProfile;
+    var id = req.user.get('userProfile');
 
     if(!ObjectID.isValid(id)) {
         return res.status(404).send();
@@ -36,12 +36,11 @@ exports.likeAndFavouriteOps = function(req, res) {
     // http://localhost/api/profile/favourite?kind=bookprofile&id=xxxxxxxx
     var query = req.query;
     var userProfileId = req.user.get('userProfile');
+    var userId = req.user.get('_id');
 
     var metaKind = '';
     var metaId = '';
     var metaOps = '';
-
-    console.log(req.user);
 
     if ( query.hasOwnProperty('kind') && query.hasOwnProperty('id') ) {
 
@@ -64,32 +63,92 @@ exports.likeAndFavouriteOps = function(req, res) {
             metaKind = 'Moment';
         }
 
+        var newUserProfileMeta = {};
+        newUserProfileMeta[metaOps] = { kind: metaKind, item: metaId };
+
         var newMeta = {};
-        newMeta[metaOps] = { kind: metaKind, id: metaId };
+        newMeta[metaOps] = userId;
 
         return UserProfile.findByMeta(userProfileId, metaOps, metaKind, metaId)
             .then( (profile) => {
-                console.log(profile);
                 if (!profile) {
+                    // add the book
                     UserProfile.findOneAndUpdate({_id: userProfileId},
-                        {$push: newMeta }, { new: true } ).then( (profile) => {
+                        {$push: newUserProfileMeta }, { new: true } ).then( (profile) => {
                         if (!profile) {
                             return res.status(404).send();
                         }
-                        res.send(profile);
+
+                        if ( metaKind === 'BookProfile' ) {
+                            BookProfile.findOneAndUpdate( { _id: metaId }, { $push: newMeta }, { new: true } )
+                                .then( (bookprofile) => {
+                                    if (!bookprofile) {
+                                        return res.status(404).send();
+                                    }
+
+                                    res.send({profile, bookprofile});
+                                })
+                        } else if ( metaKind === 'Moment' ) {
+                            Moment.findOneAndUpdate( { _id: metaId }, { $push: newMeta }, { new: true } )
+                                .then( (moment) => {
+                                    if (!moment) {
+                                        return res.status(404).send();
+                                    }
+
+                                    res.send({profile, moment});
+                                })
+                        }
                     })
                 } else {
                     UserProfile.findOneAndUpdate({_id: userProfileId},
-                        {$pull: newMeta}, {new: true}).then((profile) => {
+                        {$pull: newUserProfileMeta}, {new: true}).then((profile) => {
                         if (!profile) {
                             return res.status(404).send();
                         }
-                        res.send(profile);
+                        if ( metaKind === 'BookProfile' ) {
+                            BookProfile.findOneAndUpdate( { _id: metaId }, { $pull: newMeta }, { new: true } )
+                                .then( (bookprofile) => {
+                                    if (!bookprofile) {
+                                        return res.status(404).send();
+                                    }
+
+                                    res.send({profile, bookprofile});
+                                })
+                        } else if ( metaKind === 'Moment' ) {
+                            Moment.findOneAndUpdate( { _id: metaId }, { $pull: newMeta }, { new: true } )
+                                .then( (moment) => {
+                                    if (!moment) {
+                                        return res.status(404).send();
+                                    }
+
+                                    res.send({profile, moment});
+                                })
+                        }
                     })
                 }
             })
     } else {
         return res.status(400).send();
     }
+};
+
+exports.getUserProfile = function(req, res) {
+    var _id = req.params.id;
+
+    UserProfile.findOne({_id})
+        .populate({
+            path: 'likes.item',
+            // match: {'likes.kind': 'BookProfile'}
+        })
+        .then( (profile) => {
+            if (!profile) {
+                return res.status(404).send();
+            }
+
+            var data = _.filter(profile.likes, {kind: 'Moment'});
+
+            res.send(data);
+        })
+
 };
 

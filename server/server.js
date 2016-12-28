@@ -11,6 +11,7 @@ const port = process.env.PORT;
 var usersRouters = require('./user/user.routes.js');
 var userProfilesRouters = require('./userprofile/userprofile.routes.js');
 var bookProfilesRouters = require('./bookprofile/bookprofile.routes.js');
+var momentsRouters = require('./moment/moment.routes');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -26,6 +27,7 @@ app.use(function (req, res, next) {
 app.use('/api/user', usersRouters);
 app.use('/api/profile', userProfilesRouters);
 app.use('/api/book/detail', bookProfilesRouters);
+app.use('/api/moment', momentsRouters);
 
 app.listen(port, () => {
     console.log('The server is up and running on port: ' + port);

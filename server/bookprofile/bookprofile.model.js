@@ -5,16 +5,16 @@ const { BookReview } = require('./bookprofilereview.model');
 const { User } = require('./../user/user.model');
 const { UserProfile } = require('./../userprofile/userprofile.model');
 
-var MetaSchema = new mongoose.Schema({
-    likes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'UserProfile'
-    }],
-    favourites: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'UserProfile'
-    }]
-}, { _id: false });
+// var MetaSchema = new mongoose.Schema({
+//     likes: [{
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: 'UserProfile'
+//     }],
+//     favourites: [{
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: 'UserProfile'
+//     }]
+// }, { _id: false });
 
 var BookProfileSchema = new mongoose.Schema({
     title: String,
@@ -40,7 +40,14 @@ var BookProfileSchema = new mongoose.Schema({
     publishedDate: Date,
     summary: String,
     price: String,
-    meta: MetaSchema,
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    favourites: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     reviewsIds: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'BookReview' }]

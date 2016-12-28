@@ -1,53 +1,13 @@
 const { mongoose } = require('./../db/mongoose');
 const { ObjectID } = require('mongodb');
 
-const { BookProfile } = require('./../bookprofile/bookprofile.model');
-const { Moment } = require('./../moment/moment.model');
-
 var KidsSchema = new mongoose.Schema({
     name: String,
     DOB: Date,
     gender: String
 }, { _id: false });
 
-// likes.kind = BookProfile || Moment
-var MetaSchema = new mongoose.Schema({
-    likes: [{
-        kind: String,
-        id: {
-            type: mongoose.Schema.Types.ObjectId,
-            refPath: 'likes.kind'
-        }
-
-    }],
-    favourites: [{
-        kind: String,
-        id: {
-            type: mongoose.Schema.Types.ObjectId,
-            refPath: 'favourites.kind'
-        }
-    }]
-    //
-    //
-    // likes: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     allowNull: true,
-    //     unique: true
-    // }],
-    // favourites: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     allowNull: true,
-    //     unique: true
-    // }]
-}, { _id: false });
-
 var UserProfileSchema = new mongoose.Schema({
-    // userId: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'User',
-    //     required: true,
-    //     unique: true
-    // },
     firstName: String,
     lastName: String,
     memberId: String,
@@ -59,15 +19,14 @@ var UserProfileSchema = new mongoose.Schema({
     kids: [ KidsSchema ],
     likes: [{
         kind: String,
-        id: {
+        item: {
             type: mongoose.Schema.Types.ObjectId,
             refPath: 'likes.kind'
         }
-
     }],
     favourites: [{
         kind: String,
-        id: {
+        item: {
             type: mongoose.Schema.Types.ObjectId,
             refPath: 'favourites.kind'
         }
@@ -84,13 +43,10 @@ UserProfileSchema.statics.findByMeta = function(userProfileId, metaOps, metaKind
 
     var where = {};
     where._id = _id;
-    where[metaOps] = { $elemMatch: { 'kind': kindValue, 'id': idValue} };
-
-    console.log(where);
+    where[metaOps] = { $elemMatch: { 'kind': kindValue, 'item': idValue} };
 
     return UserProfile.findOne(where);
 };
-
 
 var UserProfile = mongoose.model('UserProfile', UserProfileSchema);
 

@@ -23,12 +23,12 @@ var PrivacySchema = new mongoose.Schema({
 }, { _id: false });
 
 var BookSchema = new mongoose.Schema({
-    ownerId: {
+    owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    bookProfileId: {
+    bookProfile: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'BookProfile'
     },
